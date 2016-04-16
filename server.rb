@@ -10,44 +10,46 @@ use Rack::Session::Cookie, {
 }
 
 get '/' do
-  session[:choose] = ""
-
   if session[:visit_count].nil?
     session[:visit_count] = 1
     session[:player] = Player.new
     session[:computer] = Computer.new
     session[:game] = Game.new
   else
-    session[:visit_count] += 1
+    @player_choice = session[:player].choice
+    @computer_choice = session[:computer].choice
+    @round_winner = session[:round].winner
+    @player_wins = session[:player].wins
+    @computer_wins = session[:computer].wins
+    @game_winner = session[:game].winner
   end
 
   erb :index
 end
 
-post '/' do
+post '/choose' do
   session[:choice] = params[:choice]
   player = session[:player]
   computer = session[:computer]
   game = session[:game]
 
   # get choices
-  @player_choice = player.chooses(session[:choice])
-  @computer_choice = computer.chooses
+  player.chooses(session[:choice])
+  computer.chooses
 
   # create new round with choices
   session[:round] = Round.new(player, computer)
   round = session[:round]
 
-  @round_winner = round.get_winner
-  @player_wins = player.wins
-  @computer_wins = computer.wins
+  round.get_winner
+  player.wins
+  computer.wins
 
   # add player objects to game object
   game.set_players(player, computer)
-  @game_winner = game.winner
-  binding.pry
+  game.get_winner
 
-  erb :index
+  redirect '/'
 end
 
 post '/reset' do

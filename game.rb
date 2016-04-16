@@ -6,7 +6,7 @@ class Game
     @computer = computer
   end
 
-  def winner
+  def get_winner
     if player.wins > 1
       @winner = player.name
     end
