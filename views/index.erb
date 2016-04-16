@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rock, Paper, Scissors</title>
+  </head>
+
+  <body class="clearfix">
+    <header>
+      <h1>Rock, Paper, Scissors</h1>
+    </header>
+
+    <form action="/" method="post">
+      <h2>Choose!</h2>
+      <input type="submit" name="choice" value="Rock">
+      <input type="submit" name="choice" value="Paper">
+      <input type="submit" name="choice" value="Scissors">
+    </form>
+
+    <% if @round_winner == "Tie" || @round_winner == "Player" || @round_winner == "Computer" %>
+      <p>You chose <%=@player_choice%>. Computer chose <%=@computer_choice%>.</p>
+        <% if @round_winner == "Tie" %>
+          <p>Its a tie!</p>
+        <% elsif @round_winner == "Player" %>
+          <p>You win this round!</p>
+        <% elsif @round_winner == "Computer" %>
+          <p>Computer wins this round!</p>
+        <% end %>
+      <p>Player Wins: <%=@player_wins %></p>
+      <p>Computer Wins: <%=@computer_wins %></p>
+    <% end %>
+
+    <% if @game_winner == "Player" || @game_winner == "Computer" %>
+      <p><%=@game_winner%> wins the game!</p>
+      <form action="/reset" method="post">
+        <button>Play Again</button>
+      </form>
+    <% end %>
+  </body>
+</html>
